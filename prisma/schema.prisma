@@ -18,3 +18,9 @@ model User {
 
   @@map("users")
 }
+
+//Enum é tipo uma variável
+// enum Role {
+//   USER
+//   ADMIN
+// }

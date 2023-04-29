@@ -1,22 +1,67 @@
+import { prisma } from '@/libs/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Users } from '@/utils/users'
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
-  const { id }: { id?: string | string[] } = req.query
+interface dataType {
+  name?: string
+  email?: string
+}
 
-  // eslint-disable-next-line prefer-const
-  let myUser = null
+const handlerGet = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id } = req.query
 
-  // eslint-disable-next-line prefer-const
-  for (let i in Users) {
-    if (Users[i].id.toString() === id) {
-      myUser = Users[i]
-    }
+  const user = await prisma.user.findUnique({
+    where: {
+      id: parseInt(id as string),
+    },
+  })
+
+  if (!user) {
+    return res.status(200).json({ message: 'User não encontrado' })
   }
-  if (myUser) {
-    res.json(myUser)
-  } else {
-    res.json({ error: 'Usuário não encontrado!' })
+  return res.status(200).send(user)
+}
+
+async function handlerPut(req: NextApiRequest, res: NextApiResponse) {
+  const { id } = req.query
+  const { name, email } = req.body
+
+  const data: dataType = {}
+
+  if (name) {
+    data.name = name
+  }
+  if (email) {
+    data.email = email
+  }
+
+  const userExists = await prisma.user.findFirst({
+    where: { id: parseInt(id as string) },
+  })
+
+  if (!userExists) {
+    return res.json({ message: 'user não encontrado' })
+  }
+
+  const userUpdated = await prisma.user.update({
+    where: { id: parseInt(id as string) },
+    data,
+  })
+
+  if (userUpdated) {
+    return res
+      .status(200)
+      .json({ message: 'Usuário alterado', newUser: userUpdated })
+  }
+}
+
+function handler(req: NextApiRequest, res: NextApiResponse) {
+  switch (req.method) {
+    case 'GET':
+      handlerGet(req, res)
+      break
+    case 'PUT':
+      handlerPut(req, res)
+      break
   }
 }
 
