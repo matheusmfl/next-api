@@ -13,6 +13,10 @@ const handlerGet = async (req: NextApiRequest, res: NextApiResponse) => {
     where: {
       id: parseInt(id as string),
     },
+    select: {
+      name: true,
+      id: true,
+    },
   })
 
   if (!user) {
@@ -54,6 +58,21 @@ async function handlerPut(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
+async function handlerDelete(req: NextApiRequest, res: NextApiResponse) {
+  const { id } = req.query
+
+  // eslint-disable-next-line no-unused-vars
+  await prisma.user
+    .delete({
+      where: { id: parseInt(id as string) },
+    })
+    .catch(() => {
+      res.json({ message: 'User não encontrado' })
+    })
+
+  return res.status(200).json({ message: 'user deletado' })
+}
+
 function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET':
@@ -62,6 +81,9 @@ function handler(req: NextApiRequest, res: NextApiResponse) {
     case 'PUT':
       handlerPut(req, res)
       break
+
+    case 'DELETE':
+      handlerDelete(req, res)
   }
 }
 
