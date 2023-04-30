@@ -54,3 +54,24 @@ Where: {
 }
 
 ## AND: []    -- Serve como um operador && 
+
+# ORDENAÇAO DE DADOS : 
+
+<h1> OrderBy  </h1>
+
+Where: {
+  name: {
+    OR: [
+      {name: 'Matheus'},
+      {name: {
+        startsWith: 'Ma'
+      }}
+    ]
+  }
+  ,
+  orderBy: {
+    id: 'asc'
+  }
+}
+## A forma acima faz um filtro de ordenação , podemos colocar pelo maior ou menor usando 'asc ou desc' 
+
