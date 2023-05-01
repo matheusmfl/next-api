@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '@/libs/prisma'
+
 import api from '@/libs/api'
 
 // GET all users
@@ -12,12 +12,7 @@ async function handlerGET(req: NextApiRequest, res: NextApiResponse) {
 async function handlerPOST(req: NextApiRequest, res: NextApiResponse) {
   const { name, email } = req.body
 
-  const newUser = await prisma.user.create({
-    data: {
-      name,
-      email,
-    },
-  })
+  const newUser = await api.addUser(name, email)
 
   return res.status(201).send(newUser)
 }

@@ -9,6 +9,16 @@ const api = {
 
     return getUsers
   },
+  addUser: async (name: string, email: string) => {
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+      },
+    })
+
+    return newUser
+  },
 }
 
 export default api
