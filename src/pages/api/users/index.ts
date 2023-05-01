@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/libs/prisma'
+import api from '@/libs/api'
 
 // GET all users
 async function handlerGET(req: NextApiRequest, res: NextApiResponse) {
-  const getUsers = await prisma.user.findMany({})
-  console.log(getUsers)
-
-  return res.status(200).send(getUsers)
+  const users = await api.getAllUsers()
+  return res.status(200).json(users)
 }
 
 // POST all users

@@ -16,6 +16,7 @@ const handlerGet = async (req: NextApiRequest, res: NextApiResponse) => {
     select: {
       name: true,
       id: true,
+      email: true,
     },
   })
 
